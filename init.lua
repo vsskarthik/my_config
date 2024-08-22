@@ -316,7 +316,7 @@ require('lazy').setup({
       { 'nvim-telescope/telescope-ui-select.nvim' },
 
       -- Useful for getting pretty icons, but requires a Nerd Font.
-      { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
+      { 'nvim-tree/nvim-web-devicons' },
     },
     config = function()
       -- Telescope is a fuzzy finder that comes with a lot of different things that
@@ -372,7 +372,8 @@ require('lazy').setup({
       pcall(require('telescope').load_extension, 'ui-select')
       -- Buffer Keymaps
       vim.keymap.set('n', '<leader>bx', '<Cmd>bdelete<CR>', { desc = 'Quit Current Buffer' })
-      vim.keymap.set('n', '<tab>', '<Cmd>bnext<CR>', { desc = 'Quit Current Buffer' })
+      vim.keymap.set('n', '<leader>bn', '<Cmd>bnext<CR>', { desc = 'Next Buffer' })
+      vim.keymap.set('n', '<leader>bp', '<Cmd>bprevious<CR>', { desc = 'Prev Buffer' })
       vim.keymap.set('n', '<leader><tab>', '<Cmd>BufferListOpen<CR>', { desc = 'Open Buffer List' })
       -- See `:help telescope.builtin`
       local builtin = require 'telescope.builtin'
@@ -720,7 +721,7 @@ require('lazy').setup({
       }
     end,
   },
-
+  --[[
   { -- You can easily change to a different colorscheme.
     -- Change the name of the colorscheme plugin below, and then
     -- change the command in the config to whatever the name of that colorscheme is
@@ -732,10 +733,20 @@ require('lazy').setup({
       -- Load the colorscheme here.
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'koehler'
+      vim.cmd.colorscheme 'tokyonight-night'
 
       -- You can configure highlights by doing something like
       vim.cmd.hi 'Comment gui=none'
+    end,
+  },]]
+  {
+    'tiagovla/tokyodark.nvim',
+    opts = {
+      -- custom options here
+    },
+    config = function(_, opts)
+      require('tokyodark').setup(opts) -- calling setup is optional
+      vim.cmd [[colorscheme tokyodark]]
     end,
   },
 
@@ -804,7 +815,24 @@ require('lazy').setup({
       --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
     end,
   },
-
+  {
+    'Exafunction/codeium.vim',
+    event = 'BufEnter',
+    config = function()
+      vim.keymap.set('i', '<C-y>', function()
+        return vim.fn['codeium#Accept']()
+      end, { expr = true, silent = true })
+      vim.keymap.set('i', '<C-;>', function()
+        return vim.fn['codeium#CycleCompletions'](1)
+      end, { expr = true, silent = true })
+      vim.keymap.set('i', '<C-,>', function()
+        return vim.fn['codeium#CycleCompletions'](-1)
+      end, { expr = true, silent = true })
+      vim.keymap.set('i', '<C-x>', function()
+        return vim.fn['codeium#Clear']()
+      end, { expr = true, silent = true })
+    end,
+  },
   -- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
   -- put them in the right spots if you want.
@@ -851,3 +879,5 @@ vim.cmd 'set tabstop=4'
 vim.cmd 'set shiftwidth=4'
 vim.cmd 'set softtabstop=4'
 vim.cmd 'set nolist'
+vim.cmd 'set expandtab'
+vim.g.codeium_disable_bindings = 1
