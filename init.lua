@@ -833,6 +833,18 @@ require('lazy').setup({
       end, { expr = true, silent = true })
     end,
   },
+  {
+    'stevearc/oil.nvim',
+    ---@module 'oil'
+    ---@type oil.SetupOpts
+    opts = {},
+    -- Optional dependencies
+    dependencies = { { 'echasnovski/mini.icons', opts = {} } },
+    -- dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if you prefer nvim-web-devicons
+    -- Lazy loading is not recommended because it is very tricky to make it work correctly in all situations.
+    lazy = false,
+  },
+  { 'ellisonleao/gruvbox.nvim', priority = 1000, config = true },
   -- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
   -- put them in the right spots if you want.
@@ -881,3 +893,6 @@ vim.cmd 'set softtabstop=4'
 vim.cmd 'set nolist'
 vim.cmd 'set expandtab'
 vim.g.codeium_disable_bindings = 1
+require('oil').setup()
+vim.o.background = 'dark'
+vim.cmd [[colorscheme gruvbox]]
